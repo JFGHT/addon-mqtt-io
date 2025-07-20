@@ -10,19 +10,22 @@ COPY requirements.txt /tmp/
 
 # Setup base
 # hadolint ignore=DL3003,DL3042
-RUN apk add --no-cache --virtual .build-dependencies \
-        build-base=0.5-r3 \
-        musl-dev=1.2.4_git20230717-r4 \
-        git \
-        libffi-dev \
-        py3-wheel \
-        python3-dev \
+RUN apk update && apk upgrade --no-cache && \
     \
-    && apk add --no-cache \
-        py3-bcrypt \
-        py3-cryptography \
-        py3-pip \
-        python3 \
+    # Dependencias de compilación (major pinning con ~)
+    apk add --no-cache --virtual .build-dependencies \
+        build-base~0 \
+        git~2 \
+        libffi-dev~3 \
+        py3-wheel~0 \
+        python3-dev~3.11 && \
+    \
+    # Paquetes runtime (también pin mayor para coherencia)
+    apk add --no-cache \
+        py3-bcrypt~4 \
+        py3-cryptography~41 \
+        py3-pip~23 \
+        python3~3.11 && \
     \
     && pip install --upgrade pip \
     && pip install -r /tmp/requirements.txt \
