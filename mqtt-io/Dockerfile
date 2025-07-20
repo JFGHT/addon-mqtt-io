@@ -29,9 +29,9 @@ RUN apk update && apk upgrade --no-cache && \
         python3~3.11 && \
     \
     # pip y requirements
-    pip install --upgrade pip && \
-    pip install  -r /tmp/requirements.txt && \
-    pip install 'Adafruit_DHT==1.4.0' --install-option="--force-pi2" && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r /tmp/requirements.txt && \
+    pip install --no-cache-dir 'Adafruit_DHT==1.4.0' --install-option="--force-pi2" && \
     \
     # limpieza de tests y byte-code
     find /usr \
