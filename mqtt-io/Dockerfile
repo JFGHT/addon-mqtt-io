@@ -12,19 +12,19 @@ COPY requirements.txt /tmp/
 # hadolint ignore=DL3003,DL3042
 RUN \
     apk add --no-cache --virtual .build-dependencies \
-        build-base=0.5-r3 \
-        git=2.43.7-r0 \
-        libffi-dev=3.4.4-r3 \
-        py3-wheel=0.42.0-r0 \
-        python3-dev=3.11.13-r0 \
+        build-base \
+        git \
+        libffi \
+        py3-wheel \
+        python3-dev \
     \
     && apk add --no-cache \
-        py3-bcrypt=4.1.1-r0 \
-        py3-cryptography=41.0.7-r0 \
-        py3-pip=23.3.1-r0 \
-        python3=3.11.13-r0 \
+        py3-bcrypt \
+        py3-cryptography \
+        py3-pip \
+        python3 \
     \
-    && pip install --upgrade pip==23.0.1 \
+    && pip install --upgrade pip \
     && pip install -r /tmp/requirements.txt \
     && pip install Adafruit_DHT==1.4.0 --install-option="--force-pi2" \
     \
