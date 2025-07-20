@@ -11,6 +11,7 @@ COPY requirements.txt /tmp/
 # Setup base
 # hadolint ignore=DL3003,DL3042
 RUN \
+    && apk upgrade --no-cache \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
         git \
