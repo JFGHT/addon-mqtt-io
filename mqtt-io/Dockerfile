@@ -14,7 +14,7 @@ RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
         git \
-        libffi \
+        libffi-dev \
         py3-wheel \
         python3-dev \
     \
