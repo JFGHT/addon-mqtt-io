@@ -10,10 +10,10 @@ COPY requirements.txt /tmp/
 
 # Setup base
 # hadolint ignore=DL3003,DL3042
-RUN apk update && apk upgrade --no-cache && \
+RUN apk update && apk upgrade --no-cache \
     \
     # Dependencias de compilación (major pinning con ~)
-    apk add --no-cache --virtual .build-dependencies \
+    && apk add --no-cache --virtual .build-dependencies \
         build-base~0 \
         git~2 \
         libffi-dev~3 \
@@ -21,7 +21,7 @@ RUN apk update && apk upgrade --no-cache && \
         python3-dev~3.11 && \
     \
     # Paquetes runtime (también pin mayor para coherencia)
-    apk add --no-cache \
+    && apk add --no-cache \
         py3-bcrypt~4 \
         py3-cryptography~41 \
         py3-pip~23 \
