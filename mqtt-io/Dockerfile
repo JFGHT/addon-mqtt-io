@@ -10,10 +10,14 @@ COPY requirements.txt /tmp/
 
 # Setup base
 # hadolint ignore=DL3003,DL3042
-# hadolint ignore=DL3003,DL3042
 RUN apk update && apk upgrade --no-cache && \
     \
-    # dependencias de compilación (pin mayor con ~)
+    # 🔄 alinear libc + headers (pin mayor con ~)
+    apk add --no-cache \
+        musl~1.2 \
+        musl-dev~1.2 && \
+    \
+    # 🔧 dependencias de compilación
     apk add --no-cache --virtual .build-dependencies \
         build-base~0 \
         git~2 \
@@ -21,26 +25,25 @@ RUN apk update && apk upgrade --no-cache && \
         py3-wheel~0 \
         python3-dev~3.11 && \
     \
-    # paquetes runtime
+    # 🔧 paquetes runtime
     apk add --no-cache \
         py3-bcrypt~4 \
         py3-cryptography~41 \
         py3-pip~23 \
         python3~3.11 && \
     \
-    # pip y requirements
+    # 🔧 Python deps del add-on
     pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /tmp/requirements.txt && \
     pip install --no-cache-dir 'Adafruit_DHT==1.4.0' --install-option="--force-pi2" && \
     \
-    # limpieza de tests y byte-code
-    find /usr \
-         \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
+    # 🔧 limpieza
+    find /usr \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
          -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
          -exec rm -rf '{}' + && \
     \
-    # quitamos las build-deps
     apk del --no-cache --purge .build-dependencies
+
 
 
 # Copy root filesystem
