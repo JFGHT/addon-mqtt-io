@@ -10,33 +10,38 @@ COPY requirements.txt /tmp/
 
 # Setup base
 # hadolint ignore=DL3003,DL3042
-RUN apk update && apk upgrade --no-cache \
+# hadolint ignore=DL3003,DL3042
+RUN apk update && apk upgrade --no-cache && \
     \
-    # Dependencias de compilación (major pinning con ~)
-    && apk add --no-cache --virtual .build-dependencies \
+    # dependencias de compilación (pin mayor con ~)
+    apk add --no-cache --virtual .build-dependencies \
         build-base~0 \
         git~2 \
         libffi-dev~3 \
         py3-wheel~0 \
         python3-dev~3.11 && \
     \
-    # Paquetes runtime (también pin mayor para coherencia)
-    && apk add --no-cache \
+    # paquetes runtime
+    apk add --no-cache \
         py3-bcrypt~4 \
         py3-cryptography~41 \
         py3-pip~23 \
         python3~3.11 && \
     \
-    && pip install --upgrade pip \
-    && pip install -r /tmp/requirements.txt \
-    && pip install Adafruit_DHT==1.4.0 --install-option="--force-pi2" \
+    # pip y requirements
+    pip install --upgrade pip && \
+    pip install  -r /tmp/requirements.txt && \
+    pip install 'Adafruit_DHT==1.4.0' --install-option="--force-pi2" && \
     \
-    && find /usr \
-        \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
-        -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
-        -exec rm -rf '{}' + \
+    # limpieza de tests y byte-code
+    find /usr \
+         \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
+         -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+         -exec rm -rf '{}' + && \
     \
-    && apk del --no-cache --purge .build-dependencies
+    # quitamos las build-deps
+    apk del --no-cache --purge .build-dependencies
+
 
 # Copy root filesystem
 COPY rootfs /
