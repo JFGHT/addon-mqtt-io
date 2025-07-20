@@ -10,10 +10,9 @@ COPY requirements.txt /tmp/
 
 # Setup base
 # hadolint ignore=DL3003,DL3042
-RUN apk update \
-    && apk upgrade --no-cache \
-    && apk add --no-cache --virtual .build-dependencies \
-        build-base \
+RUN apk add --no-cache --virtual .build-dependencies \
+        build-base=0.5-r3 \
+        musl-dev=1.2.4_git20230717-r4 \
         git \
         libffi-dev \
         py3-wheel \
